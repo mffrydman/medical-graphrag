@@ -335,8 +335,37 @@ if __name__ == "__main__":
         print("Using email:", email)
         print("Using api_key:", api_key)
         collector = PubMedDataCollector()
+        query = """
+        (
+        "Alzheimer Disease"[MeSH Terms] OR alzheimer*[tiab]
+        OR "Dementia"[MeSH Terms] OR dementia*[tiab]
+        OR "Mild Cognitive Impairment"[MeSH Terms] OR mci[tiab]
+        OR "cognitive impairment"[tiab] OR "cognitive decline"[tiab]
+        )
+        AND
+        (
+        intervention*[tiab] OR prevent*[tiab]
+        OR "Life Style"[MeSH Terms] OR lifestyle[tiab]
+        OR multidomain[tiab] OR "multi-domain"[tiab]
+        OR FINGER*[tiab] OR "World-Wide FINGERS"[tiab] OR "LatAm-FINGERS"[tiab]
+        OR randomized[tiab] OR trial*[tiab]
+        OR "Randomized Controlled Trial"[pt] OR "Clinical Trial"[pt]
+        )
+        AND
+        (
+        "Latin America"[MeSH Terms] OR "South America"[MeSH Terms] OR "Caribbean Region"[MeSH Terms]
+        OR "latin america*"[tiab] OR "south america*"[tiab] OR caribbean[tiab] OR latam[tiab]
+        OR "LatAm-FINGERS"[tiab]
+        OR argentina[tiab] OR bolivia[tiab] OR brazil[tiab] OR brasil[tiab] OR chile[tiab] OR colombia[tiab]
+        OR ecuador[tiab] OR paraguay[tiab] OR peru[tiab] OR uruguay[tiab] OR venezuela[tiab]
+        OR mexico[tiab] OR guatemala[tiab] OR honduras[tiab] OR "costa rica"[tiab] OR panama[tiab]
+        OR nicaragua[tiab] OR "el salvador"[tiab] OR belize[tiab]
+        OR cuba[tiab] OR haiti[tiab] OR "dominican republic"[tiab] OR jamaica[tiab] OR "puerto rico"[tiab]
+        )
+        AND humans[MeSH Terms]
+        """
         dataset = await collector.collect_dataset(
-            query="Alzheimer's disease dementia risk sociodemographic and genetic factors",
+            query=query,
             max_results=1000,
         )
         with open(settings.json_data.pubmed_json_path, "w") as f:
